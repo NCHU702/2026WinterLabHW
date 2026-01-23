@@ -47,7 +47,7 @@ workspace_root/
 
 ## Part I: 資料前處理 (Data Preprocessing)
 
-本階段用於將原始的淹水模擬數據與降雨測站數據，轉換為淹水預測模型所需的標準化 `sw_data_all` 格式。
+本階段用於將原始的淹水模擬數據與降雨測站數據，轉換為淹水預測模型所需的格式。
 
 ### 設定 (Configuration)
 若您的環境不同，請編輯 `config.py` 檢查路徑設定。
@@ -85,7 +85,7 @@ python process_rain.py
 *   **TWD97 邊界範圍**:
     *   X: 162085.309 ~ 192885.309
     *   Y: 2600864.874 ~ 2626264.874
-    *   (約對應 WGS84 經度 120.14°~120.44° / 緯度 23.51°~23.74°)
+    *   (約對應 WGS84 經度 120.14°~ 120.44° / 緯度 23.51°~ 23.74°)
 
 ##### (2) 陸地遮罩建立 (Masking)
 *   標記出數值為 `-999.999` (NODATA) 的區域。
@@ -117,13 +117,17 @@ python process_rain.py
 1.  **準備資料結構**：
     確保 `train_data` 目錄下包含各個颱風事件的子資料夾，且每個事件內有 `rain` 和 `flood` 資料夾。
 
-2.  **生成統計數據**：
-    執行 `scan_dataset.py`，它會遍歷 `train_data` 資料夾，計算全域最大值並存檔。這一步對於正規化至關重要。
+2. **前處理 (Optional)**：
+   若 `rain` 資料夾中尚未有 `rain_max.csv` 統計檔，可執行`gen_rain_max.py`。
 
-    ```bash
-    python scan_dataset.py
-    ```
-    *   輸出：`dataset_stats.json` (包含 `max_rain` 與 `max_flood`)。
+3. **生成統計數據**(正規化用)：
+   執行 `scan_dataset.py`，它會遍歷`train_data`資料夾尋找 `rain_max.csv` 與 `flood_max.csv`，計算全域最大值並存檔。
+
+   ```bash
+   python scan_dataset.py
+   ```
+   * 輸出：`dataset_stats.json` (包含 `max_rain` 與 `max_flood`)。
+
 
 ### 2. 模型訓練 (Training)
 
