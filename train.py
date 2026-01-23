@@ -187,7 +187,7 @@ if __name__ == "__main__":
                
                 val_loss += loss.item() * rain_tensor.size(0)
             if epoch % 5 == 0:
-                visualize_sample(val_set, epoch, flag_mask, writer, sample_idx=9, max_flood=max_flood)
+                visualize_sample(val_set, epoch, flag_mask, writer, sample_idx=9, max_val=max_flood)
 
         val_loss /= len(val_set)
         val_losses.append(val_loss)
